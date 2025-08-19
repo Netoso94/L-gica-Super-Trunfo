@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+typedef struct {
+    char estado[50];
+    int codigo;
+    char nomeCidade[100];
+    long long populacao;
+    double area; 
+    double pib; 
+    int pontosTuristicos;
+} Carta;
+
+
+void limparBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+
+void cadastrarCarta(Carta *carta, int numero) {
+    printf("\n--- Cadastro da Carta %d ---\n", numero);
+
+    printf("Estado: ");
+    fgets(carta->estado, sizeof(carta->estado), stdin);
+    carta->estado[strcspn(carta->estado, "\n")] = 0; 
+
+    printf("Código da Carta: ");
+    scanf("%d", &carta->codigo);
+    limparBuffer(); 
+
+    printf("Nome da Cidade: ");
+    fgets(carta->nomeCidade, sizeof(carta->nomeCidade), stdin);
+    carta->nomeCidade[strcspn(carta->nomeCidade, "\n")] = 0;
+
+    printf("População: ");
+    scanf("%lld", &carta->populacao);
+    limparBuffer();
+
+    printf("Área (km²): ");
+    scanf("%lf", &carta->area);
+    limparBuffer();
+
+    printf("PIB (em bilhões): ");
+    scanf("%lf", &carta->pib);
+    limparBuffer();
+
+    printf("Número de Pontos Turísticos: ");
+    scanf("%d", &carta->pontosTuristicos);
+    limparBuffer();
+
+    printf("Carta %d cadastrada com sucesso!\n", numero);
+}
+
+
+void exibirCarta(Carta carta) {
+    printf("  > Código: %d\n", carta.codigo);
+    printf("  > Nome: %s, %s\n", carta.nomeCidade, carta.estado);
+    printf("  > População: %lld habitantes\n", carta.populacao);
+    printf("  > Área: %.2lf km²\n", carta.area);
+    printf("  > PIB: R$ %.2lf bilhões\n", carta.pib);
+    printf("  > Pontos Turísticos: %d\n", carta.pontosTuristicos);
+    printf("\n");
+}
+
+int main() {
+    
+    Carta carta1, carta2;
+
+    printf("=======================================\n");
+    printf("  Bem-vindo ao Super Trunfo - Nível Novato\n");
+    printf("=======================================\n");
+
+ 
+    cadastrarCarta(&carta1, 1);
+    cadastrarCarta(&carta2, 2);
+
+   
+    printf("\n\n--- Propriedades das Cartas Cadastradas ---\n");
+    printf("Carta 1:\n");
+    exibirCarta(carta1);
+    printf("Carta 2:\n");
+    exibirCarta(carta2);
+
+   
+    printf("--- Resultado da Comparação por População ---\n");
+    if (carta1.populacao > carta2.populacao) {
+        printf("A Carta 1 (%s) vence! Maior população.\n", carta1.nomeCidade);
+    } else if (carta2.populacao > carta1.populacao) {
+        printf("A Carta 2 (%s) vence! Maior população.\n", carta2.nomeCidade);
+    } else {
+        printf("Empate! As cartas têm a mesma população.\n");
+    }
+
+   
+    printf("\n--- Resultado da Comparação por Densidade Populacional ---\n");
+    if (carta1.area > 0 && carta2.area > 0) {
+        double densidade1 = (double)carta1.populacao / carta1.area;
+        double densidade2 = (double)carta2.populacao / carta2.area;
+
+        printf("Densidade Populacional da Carta 1 (%s): %.2lf hab/km²\n", carta1.nomeCidade, densidade1);
+        printf("Densidade Populacional da Carta 2 (%s): %.2lf hab/km²\n", carta2.nomeCidade, densidade2);
+
+        if (densidade1 < densidade2) {
+            printf("A Carta 1 (%s) vence! Menor densidade populacional.\n", carta1.nomeCidade);
+        } else if (densidade2 < densidade1) {
+            printf("A Carta 2 (%s) vence! Menor densidade populacional.\n", carta2.nomeCidade);
+        } else {
+            printf("Empate! As densidades populacionais são iguais.\n");
+        }
+    } else {
+        printf("Não foi possível calcular a densidade populacional (área inválida).\n");
+    }
+
+    printf("\nFim do programa.\n");
+
+    return 0;
+}
